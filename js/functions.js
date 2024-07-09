@@ -1,28 +1,23 @@
 // функция проверки длины строки
-function validStrokeLength(stroke, length) {
-  return stroke.length <= length;
-}
+const isValidLength = (stroke, maxLength) => stroke.length <= maxLength;
 
-validStrokeLength('Люблю грозу в начале мая!', 25);
-validStrokeLength('Люблю грозу в начале мая!', 24);
-validStrokeLength('Люблю грозу в начале мая!', 56);
+isValidLength('Люблю грозу в начале мая!', 25);
+isValidLength('Люблю грозу в начале мая!', 24);
+isValidLength('Люблю грозу в начале мая!', 56);
 
 // функция проверки на палиндром
-function validPalindrome(stroke) {
-  const newStroke = stroke.replaceAll(' ', '').toLowerCase();
-  let reverseStroke = '';
-  for(let i = newStroke.length - 1; i > -1; i--) {
-    reverseStroke += newStroke[i];
-  }
+const isPalindrome = (stroke) => {
+  const newStroke = stroke.replaceAll(/[\s\p{P}]/gu, '').toLowerCase();
+  const reverseStroke = newStroke.split('').reverse().join('');
 
   return newStroke === reverseStroke;
-}
+};
 
-validPalindrome('Люблю грозу в начале мая');
-validPalindrome('Лёша на полке клопа нашёл ');
-validPalindrome('топот');
-validPalindrome('ДовОд');
-validPalindrome('Кекс');
+isPalindrome('Люблю грозу в начале мая');
+isPalindrome('Лёша на полке клопа нашёл ');
+isPalindrome('топот');
+isPalindrome('ДовОд');
+isPalindrome('Кекс');
 
 // функция поиска и возврата числа
 function getNumber(value) {
@@ -30,7 +25,7 @@ function getNumber(value) {
     return Math.abs(value);
   }
 
-  const newString = value.toString().replaceAll(/[а-яА-Яa-zA-Z' '\p{P}]/gu , '');
+  const newString = value.toString().replaceAll(/[а-яА-Яa-zA-Z\s\p{P}]/gu , '');
 
   if(newString) {
     return Number(newString);
