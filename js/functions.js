@@ -1,3 +1,22 @@
+// ЗАДАНИЕ 5.16. "ФУНКЦИИ ВОЗВРАЩАЮТСЯ"
+const getMinutes = (time) => {
+  const hour = +time.slice(0, time.indexOf(':'));
+  const minute = +time.slice(time.indexOf(':') + 1);
+  return hour * 60 + minute;
+};
+
+const canMeetingToday = (dayStart, dayEnd, meetingStart, meetingDuration) => !(getMinutes(dayStart) > getMinutes(meetingStart) || getMinutes(dayEnd) < getMinutes(meetingStart) || getMinutes(dayEnd) < (getMinutes(meetingStart) + meetingDuration));
+
+canMeetingToday('08:00', '17:30', '14:00', 90);
+canMeetingToday('8:0', '10:0', '8:0', 120);
+canMeetingToday('08:00', '14:30', '14:00', 90);
+canMeetingToday('14:00', '17:30', '08:0', 90);
+canMeetingToday('8:00', '17:30', '08:00', 900);
+
+/* ------ АРХИВ СТАРЫХ ЗАДАНИЙ ----- */
+
+// ЗАДАНИЕ 2.31. "НУЖНО БОЛЬШЕ ФУНКЦИЙ"
+
 // функция проверки длины строки
 const isValidLength = (stroke, maxLength) => stroke.length <= maxLength;
 
