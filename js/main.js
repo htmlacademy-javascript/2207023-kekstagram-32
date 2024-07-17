@@ -1,3 +1,3 @@
-import { createData } from './data.js';
+import { thumbnailsInit } from './thumbnails.js';
 
-createData();
+thumbnailsInit();
