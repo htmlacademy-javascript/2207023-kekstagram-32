@@ -19,4 +19,4 @@ const thumbnailsInit = () => {
   PICTURE_PLACE.appendChild(PICTURE_FRAGMENT);
 };
 
-export {thumbnailsInit};
+export {thumbnailsInit, pictureData};

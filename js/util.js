@@ -16,4 +16,34 @@ const getUniqueNumber = () => {
 // случайный элемент в массиве
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-export {getRandomInteger, getUniqueNumber, getRandomArrayElement};
+// создание элемента
+const makeElement = (tagName, className, text) => {
+  const element = document.createElement(tagName);
+  if(className) {
+    element.classList.add(className);
+  }
+
+  if(text) {
+    element.textContent = text;
+  }
+
+  return element;
+};
+
+// создание комментария
+const createComment = (url, description, text) => {
+  const item = makeElement('li', 'social__comment');
+  const image = makeElement('img', 'social__picture');
+  image.src = url;
+  image.alt = description;
+  image.width = 35;
+  image.height = 35;
+  item.appendChild(image);
+
+  const textComment = makeElement('p', 'social__text', text);
+  item.appendChild(textComment);
+
+  return item;
+};
+
+export {getRandomInteger, getUniqueNumber, getRandomArrayElement, createComment};
