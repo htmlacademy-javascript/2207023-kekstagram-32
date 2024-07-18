@@ -17,14 +17,20 @@ const getUniqueNumber = () => {
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 // создание элемента
-const makeElement = (tagName, className, text) => {
+const makeElement = (tagName, params) => {
   const element = document.createElement(tagName);
-  if(className) {
-    element.classList.add(className);
-  }
+  if(typeof params === 'object') {
+    if(params.className) {
+      element.classList.add(params.className);
+    }
 
-  if(text) {
-    element.textContent = text;
+    if(params.text) {
+      element.textContent = params.text;
+    }
+
+    Object.entries(params).forEach(([key, value]) => {
+      element[key] = value;
+    });
   }
 
   return element;
@@ -32,15 +38,12 @@ const makeElement = (tagName, className, text) => {
 
 // создание комментария
 const createComment = (url, description, text) => {
-  const item = makeElement('li', 'social__comment');
-  const image = makeElement('img', 'social__picture');
-  image.src = url;
-  image.alt = description;
-  image.width = 35;
-  image.height = 35;
+  const item = makeElement('li', {className: 'social__comment'});
+
+  const image = makeElement('img', {className:'social__picture', src: url, alt: description, width: 35, height: 35});
   item.appendChild(image);
 
-  const textComment = makeElement('p', 'social__text', text);
+  const textComment = makeElement('p', {className: 'social__text', text: text});
   item.appendChild(textComment);
 
   return item;
