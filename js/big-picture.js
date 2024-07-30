@@ -1,4 +1,4 @@
-import { createComment } from './util';
+import { createComment, closePopupKeydown, openPopup, closePopup } from './util';
 
 const thumbnailsContainer = document.querySelector('.pictures');
 const bigPicturePopup = document.querySelector('.big-picture');
@@ -28,38 +28,28 @@ const showMoreComment = () => {
   commentShowCount.textContent = bigPicturePopup.querySelectorAll('.social__comment:not(.hidden)').length;
 };
 
-const closePopupKeydown = (evt) => {
+const closeBigPictureKeydown = (evt) => {
+  closePopupKeydown(evt, bigPicturePopup, closeBigPictureKeydown);
+
   if(evt.key === 'Escape') {
-    document.body.classList.remove('modal-open');
-    bigPicturePopup.classList.add('hidden');
-
     maxCommentShow = MAX_COMMENT_SHOW_COUNT;
-
-    document.removeEventListener('keydown', closePopupKeydown);
   }
 };
 
-const openPopup = (evt) => {
-  evt.preventDefault();
-  document.body.classList.add('modal-open');
-  bigPicturePopup.classList.remove('hidden');
-
-  document.addEventListener('keydown', closePopupKeydown);
+const openBigPicture = (evt) => {
+  openPopup(evt, bigPicturePopup, closeBigPictureKeydown);
 };
 
-const closePopup = () => {
-  document.body.classList.remove('modal-open');
-  bigPicturePopup.classList.add('hidden');
 
+const closeBigPicture = () => {
+  closePopup(bigPicturePopup, closeBigPictureKeydown);
   maxCommentShow = MAX_COMMENT_SHOW_COUNT;
-
-  document.removeEventListener('keydown', closePopupKeydown);
 };
 
 const bigPicturePopupInit = (pictureData) => {
   thumbnailsContainer.addEventListener('click', (evt) => {
     if(evt.target.closest('.picture')) {
-      openPopup(evt);
+      openBigPicture(evt);
 
       const thumbnail = evt.target.closest('.picture');
 
@@ -89,7 +79,7 @@ const bigPicturePopupInit = (pictureData) => {
   });
 
   closePopupButton.addEventListener('click', () => {
-    closePopup();
+    closeBigPicture();
   });
 };
 
