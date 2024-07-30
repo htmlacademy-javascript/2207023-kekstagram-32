@@ -49,4 +49,29 @@ const createComment = (url, description, text) => {
   return item;
 };
 
-export {getRandomInteger, getUniqueNumber, getRandomArrayElement, createComment};
+// открытие и закрытие всплывающего окна
+const closePopupKeydown = (evt, modalEl, callback) => {
+  if(evt.key === 'Escape') {
+    document.body.classList.remove('modal-open');
+    modalEl.classList.add('hidden');
+
+    document.removeEventListener('keydown', callback);
+  }
+};
+
+const openPopup = (evt, modalEl, callback) => {
+  evt.preventDefault();
+  document.body.classList.add('modal-open');
+  modalEl.classList.remove('hidden');
+
+  document.addEventListener('keydown', callback);
+};
+
+const closePopup = (modalEl, callback) => {
+  document.body.classList.remove('modal-open');
+  modalEl.classList.add('hidden');
+
+  document.removeEventListener('keydown', callback);
+};
+
+export {getRandomInteger, getUniqueNumber, getRandomArrayElement, createComment, closePopupKeydown, openPopup, closePopup};
