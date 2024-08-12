@@ -1,5 +1,7 @@
 import { closePopupKeydown, openPopup, closePopup } from './util.js';
 import '../vendor/pristine/pristine.min.js';
+import { scaleInit } from './scale-image.js';
+import { filterImageInit, filterImageReset } from './image-filters.js';
 
 const uploadForm = document.querySelector('.img-upload__form#upload-select-image');
 const uploadInput = uploadForm.querySelector('.img-upload__input');
@@ -25,12 +27,12 @@ const closeEditPicturePopupKeydown = (evt) => {
 
 const openEditPicturePopup = (evt) => {
   openPopup(evt, editPicturePopup, closeEditPicturePopupKeydown);
+  filterImageReset(uploadForm);
+  filterImageInit(uploadForm);
 };
 
 const closeEditPicturePopup = () => {
   closePopup(editPicturePopup, closeEditPicturePopupKeydown);
-  uploadForm.reset();
-  validator.reset();
 };
 
 uploadInput.addEventListener('input', (evt) => {
@@ -102,6 +104,8 @@ const hasDublicateHashTags = (value) => {
 };
 
 validator.addValidator(hashTagInput, hasDublicateHashTags, 'Хэштеги повторяются', 1, true);
+
+scaleInit(uploadForm);
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
