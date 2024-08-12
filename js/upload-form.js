@@ -46,45 +46,60 @@ hashTagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', closeEditPicturePopupKeydown);
 });
 
-const validator = new Pristine(uploadForm);
+const configValidate = {
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--error',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextTag: 'div',
+};
+
+const validator = new Pristine(uploadForm, configValidate, false);
 
 const validateComment = (value) => value.length >= 0 && value.length <= 140;
 
-validator.addValidator(commentInput, validateComment);
+validator.addValidator(commentInput, validateComment, 'Длина комментария больше 140 символов');
+
+const hashTagArray = (value) => value.split(' ').filter((el) => el !== '').map((el) => el.toLowerCase());
 
 const regExpHashTag = /^#[a-zа-яё0-9]+$/i;
 
 const validateHashTag = (value) => (regExpHashTag.test(value) && value.length < 21);
 
-const validateHashTags = () => {
-  let isValide = true;
-  hashTagInput.addEventListener('input', () => {
-    const hashTagArray = hashTagInput.value.split(' ').filter((el) => el !== '');
-    if(hashTagArray.length > 5) {
-      isValide = false;
-    } else {
-      isValide = true;
-    }
-
-    if(hashTagArray.length > 0) {
-      hashTagArray.forEach((el) => {
-        if(!validateHashTag(el)) {
-          isValide = false;
-        } else {
-          isValide = true;
-        }
-      });
-    }
-
-    // console.log(hashTagArray);
-    // console.log(validateHashTag(el),el.length);
-
-    // console.log(validateHashTag(hashTagInput.value));
+const hashTagsIsValid = (value) => {
+  const valideArray = [];
+  hashTagArray(value).forEach((el) => {
+    valideArray.push(validateHashTag(el));
   });
-  return isValide;
+
+  if(valideArray.indexOf(false) > -1) {
+    return false;
+  }
+
+  return true;
 };
 
-validator.addValidator(hashTagInput, validateHashTags);
+validator.addValidator(hashTagInput, hashTagsIsValid, 'Введён невалидный хэштег', 1, true);
+
+const isManyHashTag = (value) => hashTagArray(value).length <= 5;
+
+validator.addValidator(hashTagInput, isManyHashTag, 'Превышено количество хэштегов', 1, true);
+
+const hasDublicateHashTags = (value) => {
+  const valideArray = [];
+  hashTagArray(value).forEach((el,i,arr) => {
+    if(arr.length > 1) {
+      valideArray.push(arr.indexOf(el) === i);
+    }
+  });
+
+  if(valideArray.indexOf(false) > -1) {
+    return false;
+  }
+
+  return true;
+};
+
+validator.addValidator(hashTagInput, hasDublicateHashTags, 'Хэштеги повторяются', 1, true);
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -92,4 +107,3 @@ uploadForm.addEventListener('submit', (evt) => {
     uploadForm.submit();
   }
 });
-
