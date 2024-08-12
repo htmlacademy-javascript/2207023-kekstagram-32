@@ -8,9 +8,19 @@ const commentInput = uploadForm.querySelector('.text__description');
 const hashTagInput = uploadForm.querySelector('.text__hashtags');
 const closeButtonEditPicturePopup = uploadForm.querySelector('.img-upload__cancel');
 
+const configValidate = {
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--error',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextTag: 'div',
+};
+
+const validator = new Pristine(uploadForm, configValidate, false);
+
 const closeEditPicturePopupKeydown = (evt) => {
   closePopupKeydown(evt, editPicturePopup, closeEditPicturePopupKeydown);
   uploadForm.reset();
+  validator.reset();
 };
 
 const openEditPicturePopup = (evt) => {
@@ -20,6 +30,7 @@ const openEditPicturePopup = (evt) => {
 const closeEditPicturePopup = () => {
   closePopup(editPicturePopup, closeEditPicturePopupKeydown);
   uploadForm.reset();
+  validator.reset();
 };
 
 uploadInput.addEventListener('input', (evt) => {
@@ -45,15 +56,6 @@ hashTagInput.addEventListener('focus', () => {
 hashTagInput.addEventListener('blur', () => {
   document.addEventListener('keydown', closeEditPicturePopupKeydown);
 });
-
-const configValidate = {
-  classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'div',
-};
-
-const validator = new Pristine(uploadForm, configValidate, false);
 
 const validateComment = (value) => value.length >= 0 && value.length <= 140;
 
