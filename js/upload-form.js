@@ -1,5 +1,5 @@
 import { closePopupKeydown, openPopup, closePopup } from './util';
-import '/vendor/pristine/pristine.min.js';
+import '../vendor/pristine/pristine.min.js';
 
 const uploadForm = document.querySelector('.img-upload__form#upload-select-image');
 const uploadInput = uploadForm.querySelector('.img-upload__input');

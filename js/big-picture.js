@@ -1,4 +1,4 @@
-import { createComment, closePopupKeydown, openPopup, closePopup } from './util';
+import { createComment, closePopupKeydown, openPopup, closePopup } from './util.js';
 
 const thumbnailsContainer = document.querySelector('.pictures');
 const bigPicturePopup = document.querySelector('.big-picture');
