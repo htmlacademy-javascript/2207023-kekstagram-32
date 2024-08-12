@@ -80,6 +80,7 @@ const filterImageInit = (form) => {
             'max': filter.max
           },
           step: filter.step,
+          start: 0,
         });
         effectLevelBlock.style.display = null;
 
