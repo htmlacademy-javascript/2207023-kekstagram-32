@@ -58,8 +58,10 @@ const bigPicturePopupInit = (pictureData) => {
       likesCount.textContent = thumbnail.querySelector('.picture__likes').textContent;
 
       commentList.innerHTML = '';
+      // console.log(pictureData)
       pictureData.forEach(({url, comments}) => {
         if(thumbnail.querySelector('.picture__img').src.indexOf(url) > -1) {
+
           comments.forEach(({avatar, message, name}) => {
             commentList.appendChild(createComment(avatar, name, message));
           });

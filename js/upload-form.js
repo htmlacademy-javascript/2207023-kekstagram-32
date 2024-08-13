@@ -1,4 +1,5 @@
 import { closePopupKeydown, openPopup, closePopup } from './util.js';
+import { sendData } from './api.js';
 import '../vendor/pristine/pristine.min.js';
 import { scaleInit } from './scale-image.js';
 import { filterImageInit, filterImageReset } from './image-filters.js';
@@ -9,6 +10,7 @@ const editPicturePopup = uploadForm.querySelector('.img-upload__overlay');
 const commentInput = uploadForm.querySelector('.text__description');
 const hashTagInput = uploadForm.querySelector('.text__hashtags');
 const closeButtonEditPicturePopup = uploadForm.querySelector('.img-upload__cancel');
+const submitButton = uploadForm.querySelector('.img-upload__submit');
 
 const configValidate = {
   classTo: 'img-upload__field-wrapper',
@@ -32,9 +34,11 @@ const openEditPicturePopup = (evt) => {
 
 const closeEditPicturePopup = () => {
   closePopup(editPicturePopup, closeEditPicturePopupKeydown);
+  uploadForm.reset();
+  validator.reset();
 };
 
-uploadInput.addEventListener('input', (evt) => {
+uploadInput.addEventListener('change', (evt) => {
   openEditPicturePopup(evt);
 });
 
@@ -106,9 +110,69 @@ validator.addValidator(hashTagInput, hasDublicateHashTags, 'Хэштеги по�
 
 scaleInit(uploadForm);
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if(validator.validate()) {
-    uploadForm.submit();
-  }
-});
+// uploadForm.addEventListener('submit', (evt) => {
+//   evt.preventDefault();
+//   if(validator.validate()) {
+//     uploadForm.submit();
+//   }
+// });
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  // submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  // submitButton.textContent = SubmitButtonText.IDLE;
+};
+const successPostMasageInit = () => {
+  const SUCCESS_MESSAGE_POST_TEMPLATE = document.querySelector('#success').content.querySelector('.success');
+  const successFragment = document.createDocumentFragment();
+  const message = SUCCESS_MESSAGE_POST_TEMPLATE.cloneNode(true);
+  successFragment.appendChild(message);
+  document.body.appendChild(successFragment);
+
+  const successSection = document.querySelector('.success');
+
+  const closeSuccessMassage = (evt) => {
+    if(evt.target.classList.contains('success__button')) {
+      document.body.removeChild(successSection);
+    }
+    if(evt.target.classList.contains('success') && evt.target.classList !== 'success__inner') {
+      document.body.removeChild(successSection);
+    }
+    if(evt.key === 'Escape') {
+      document.body.removeChild(successSection);
+    }
+
+    document.removeEventListener('click', closeSuccessMassage);
+    document.removeEventListener('keydown', closeSuccessMassage);
+  };
+
+  document.addEventListener('click', closeSuccessMassage);
+  document.addEventListener('keydown', closeSuccessMassage);
+};
+
+
+const setUserFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = validator.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(successPostMasageInit)
+        .then(onSuccess)
+        .catch(
+          (err) => {
+            throw new Error(err);
+          }
+        )
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+setUserFormSubmit(closeEditPicturePopup);

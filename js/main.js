@@ -1,9 +1,16 @@
-import { thumbnailsInit, pictureData } from './thumbnails.js';
+import { getData } from './api.js';
 
-thumbnailsInit();
-
-import { bigPicturePopupInit } from './big-picture.js';
-
-bigPicturePopupInit(pictureData);
+import { usersPicture } from './thumbnails.js';
 
 import './upload-form.js';
+
+
+getData()
+  .then((pictureData) => {
+    usersPicture(pictureData);
+  })
+  .catch(
+    (err) => {
+      throw new Error(err);
+    }
+  );
