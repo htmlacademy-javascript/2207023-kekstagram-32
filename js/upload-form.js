@@ -3,6 +3,8 @@ import { sendData } from './api.js';
 import { scaleInit } from './scale-image.js';
 import { filterImageInit, filterImageReset } from './image-filters.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const uploadForm = document.querySelector('.img-upload__form#upload-select-image');
 const uploadInput = uploadForm.querySelector('.img-upload__input');
 const editPicturePopup = uploadForm.querySelector('.img-upload__overlay');
@@ -10,6 +12,8 @@ const commentInput = uploadForm.querySelector('.text__description');
 const hashTagInput = uploadForm.querySelector('.text__hashtags');
 const closeButtonEditPicturePopup = uploadForm.querySelector('.img-upload__cancel');
 const submitButton = uploadForm.querySelector('.img-upload__submit');
+
+const preview = uploadForm.querySelector('.img-upload__preview img');
 
 const configValidate = {
   classTo: 'img-upload__field-wrapper',
@@ -39,6 +43,15 @@ const closeEditPicturePopup = () => {
 
 uploadInput.addEventListener('change', (evt) => {
   openEditPicturePopup(evt);
+
+  const file = uploadInput.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    preview.src = URL.createObjectURL(file);
+  }
 });
 
 closeButtonEditPicturePopup.addEventListener('click', () => {
