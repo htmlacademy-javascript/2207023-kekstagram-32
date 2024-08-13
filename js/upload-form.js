@@ -12,9 +12,8 @@ const closeButtonEditPicturePopup = uploadForm.querySelector('.img-upload__cance
 
 const configValidate = {
   classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
+  errorTextClass: 'img-upload__field-wrapper--error',
   errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'div',
 };
 
 const validator = new Pristine(uploadForm, configValidate, false);
