@@ -1,6 +1,5 @@
 import { closePopupKeydown, openPopup, closePopup } from './util.js';
 import { sendData } from './api.js';
-import '../vendor/pristine/pristine.min.js';
 import { scaleInit } from './scale-image.js';
 import { filterImageInit, filterImageReset } from './image-filters.js';
 

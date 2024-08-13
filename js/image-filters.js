@@ -1,5 +1,3 @@
-import '../vendor/nouislider/nouislider.js';
-
 const Filters = [
   {
     name: 'none',

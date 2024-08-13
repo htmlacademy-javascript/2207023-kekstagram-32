@@ -14,13 +14,13 @@ const closePopupButton = bigPicturePopup.querySelector('.big-picture__cancel');
 const MAX_COMMENT_SHOW_COUNT = 5;
 const STEP_OPEN_MORE_COMMENT = 5;
 
-let maxCommentShow = MAX_COMMENT_SHOW_COUNT;
+let maxCommentShow = 0;
 
-const showMoreComment = () => {
-  bigPicturePopup.querySelectorAll('.social__comment').forEach((elem, index) => {
+const showMoreComment = (popup, max = MAX_COMMENT_SHOW_COUNT) => {
+  popup.querySelectorAll('.social__comment').forEach((elem, index) => {
     elem.classList.remove('hidden');
 
-    if((index + 1) > maxCommentShow) {
+    if((index + 1) > max) {
       elem.classList.add('hidden');
     }
   });
@@ -28,22 +28,25 @@ const showMoreComment = () => {
   commentShowCount.textContent = bigPicturePopup.querySelectorAll('.social__comment:not(.hidden)').length;
 };
 
+const moreLoad = () => {
+  maxCommentShow += STEP_OPEN_MORE_COMMENT;
+  showMoreComment(bigPicturePopup, maxCommentShow);
+};
+
 const closeBigPictureKeydown = (evt) => {
   closePopupKeydown(evt, bigPicturePopup, closeBigPictureKeydown);
-
-  if(evt.key === 'Escape') {
-    maxCommentShow = MAX_COMMENT_SHOW_COUNT;
-  }
+  commentMoreLoadButton.removeEventListener('click', moreLoad);
 };
 
 const openBigPicture = (evt) => {
   openPopup(evt, bigPicturePopup, closeBigPictureKeydown);
+  maxCommentShow = MAX_COMMENT_SHOW_COUNT;
 };
 
 
 const closeBigPicture = () => {
   closePopup(bigPicturePopup, closeBigPictureKeydown);
-  maxCommentShow = MAX_COMMENT_SHOW_COUNT;
+  commentMoreLoadButton.removeEventListener('click', moreLoad);
 };
 
 const bigPicturePopupInit = (pictureData) => {
@@ -58,7 +61,6 @@ const bigPicturePopupInit = (pictureData) => {
       likesCount.textContent = thumbnail.querySelector('.picture__likes').textContent;
 
       commentList.innerHTML = '';
-      // console.log(pictureData)
       pictureData.forEach(({url, comments}) => {
         if(thumbnail.querySelector('.picture__img').src.indexOf(url) > -1) {
 
@@ -68,13 +70,9 @@ const bigPicturePopupInit = (pictureData) => {
         }
       });
 
-      showMoreComment();
+      showMoreComment(bigPicturePopup);
 
-      commentMoreLoadButton.addEventListener('click', () => {
-        maxCommentShow += STEP_OPEN_MORE_COMMENT;
-
-        showMoreComment();
-      });
+      commentMoreLoadButton.addEventListener('click', moreLoad);
 
       commentAllCount.textContent = thumbnail.querySelector('.picture__comments').textContent;
     }
