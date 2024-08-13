@@ -13,6 +13,25 @@ const getUniqueNumber = () => {
   return () => value++;
 };
 
+// генерация числа из диапазона с возможностью случайного
+const getRandomIdRange = (min, max) => {
+  const previousValues = [];
+
+  return function () {
+    let currentValue;
+
+    currentValue = getRandomInteger(min, max);
+
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomInteger(min, max);
+    }
+    previousValues.push(currentValue);
+
+    return currentValue;
+
+  };
+};
+
 // случайный элемент в массиве
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
@@ -74,4 +93,4 @@ const closePopup = (modalEl, callback) => {
   document.removeEventListener('keydown', callback);
 };
 
-export {getRandomInteger, getUniqueNumber, getRandomArrayElement, createComment, closePopupKeydown, openPopup, closePopup};
+export {getRandomInteger, getUniqueNumber, getRandomIdRange, getRandomArrayElement, createComment, closePopupKeydown, openPopup, closePopup};
