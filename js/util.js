@@ -1,50 +1,10 @@
-// функция случайного числа из диапазона
-const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
+const ALERT_SHOW_TIME = 5000;
 
-// последовательная генерация чисел
-const getUniqueNumber = () => {
-  let value = 1;
-
-  return () => value++;
-};
-
-// генерация числа из диапазона с возможностью случайного
-const getRandomIdRange = (min, max) => {
-  const previousValues = [];
-
-  return function () {
-    let currentValue;
-
-    currentValue = getRandomInteger(min, max);
-
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousValues.push(currentValue);
-
-    return currentValue;
-
-  };
-};
-
-// случайный элемент в массиве
-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
-
-// создание элемента
 const makeElement = (tagName, params) => {
   const element = document.createElement(tagName);
   if(typeof params === 'object') {
     if(params.className) {
       element.classList.add(params.className);
-    }
-
-    if(params.text) {
-      element.textContent = params.text;
     }
 
     Object.entries(params).forEach(([key, value]) => {
@@ -55,42 +15,35 @@ const makeElement = (tagName, params) => {
   return element;
 };
 
-// создание комментария
-const createComment = (url, description, text) => {
+const createComment = ({avatar, name, message}) => {
   const item = makeElement('li', {className: 'social__comment'});
 
-  const image = makeElement('img', {className:'social__picture', src: url, alt: description, width: 35, height: 35});
+  const image = makeElement('img', {className:'social__picture', src: avatar, alt: name, width: 35, height: 35});
   item.appendChild(image);
 
-  const textComment = makeElement('p', {className: 'social__text', text: text});
+  const textComment = makeElement('p', {className: 'social__text', textContent: message});
   item.appendChild(textComment);
 
   return item;
 };
 
-// открытие и закрытие всплывающего окна
-const closePopupKeydown = (evt, modalEl, callback) => {
-  if(evt.key === 'Escape') {
-    document.body.classList.remove('modal-open');
-    modalEl.classList.add('hidden');
+const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 
-    document.removeEventListener('keydown', callback);
-  }
+const showAllert = () => {
+  const dataErrorElement = dataErrorTemplate.cloneNode(true);
+  document.body.append(dataErrorElement);
+
+  setTimeout(() => {
+    dataErrorElement.remove();
+  }, ALERT_SHOW_TIME);
 };
 
-const openPopup = (evt, modalEl, callback) => {
-  evt.preventDefault();
-  document.body.classList.add('modal-open');
-  modalEl.classList.remove('hidden');
-
-  document.addEventListener('keydown', callback);
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
 };
 
-const closePopup = (modalEl, callback) => {
-  document.body.classList.remove('modal-open');
-  modalEl.classList.add('hidden');
-
-  document.removeEventListener('keydown', callback);
-};
-
-export {getRandomInteger, getUniqueNumber, getRandomIdRange, getRandomArrayElement, createComment, closePopupKeydown, openPopup, closePopup};
+export { createComment, showAllert, debounce };
