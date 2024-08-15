@@ -50,6 +50,9 @@ const hideModal = () => {
 const toggleSubmitButton = (isDisabled) => {
   submitButton.disabled = isDisabled;
   submitButton.disabled = isDisabled ? submitButton.textContent = SubmitButtonText.SUBMITTING : submitButton.textContent = SubmitButtonText.IDLE;
+  if(!isDisabled) {
+    submitButton.removeAttribute('disabled');
+  }
 };
 
 const isTextFieldFocused = () => document.activeElement === hashTagInput || document.activeElement === commentInput;
